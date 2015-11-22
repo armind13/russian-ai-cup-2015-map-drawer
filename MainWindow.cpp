@@ -29,7 +29,6 @@ void MainWindow::paintEvent(QPaintEvent*)
     }
     QPainter painter(this);
 
-    int size = tiles.count();
     for (int i = 0; i < tiles.count(); ++i)
     {
         for (int j = 0; j < tiles.at(i).count(); ++j)
@@ -75,13 +74,14 @@ void MainWindow::paintEvent(QPaintEvent*)
                     break;
             }
             painter.drawImage(i * TileSize, j * TileSize, tile);
-            if (size < i)
-            {
-                size = i;
-            }
         }
     }
 
+    int size = tiles.count();
+    if (size < tiles.at(0).count())
+    {
+        size = tiles.at(0).count();
+    }
     int lenghtOfWindow = size * TileSize;
     QPoint leftTop = geometry().topLeft();
     setGeometry(QRect(leftTop, QSize(lenghtOfWindow, lenghtOfWindow)));
