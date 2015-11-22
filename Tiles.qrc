@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/TilesImages">
+        <file>tiles/BOTTOM_HEADED_T.png</file>
+        <file>tiles/CROSSROADS.png</file>
+        <file>tiles/EMPTY.png</file>
+        <file>tiles/HORIZONTAL.png</file>
+        <file>tiles/LEFT_BOTTOM_CORNER.png</file>
+        <file>tiles/LEFT_HEADED_T.png</file>
+        <file>tiles/LEFT_TOP_CORNER.png</file>
+        <file>tiles/RIGHT_BOTTOM_CORNER.png</file>
+        <file>tiles/RIGHT_HEADED_T.png</file>
+        <file>tiles/RIGHT_TOP_CORNER.png</file>
+        <file>tiles/TOP_HEADED_T.png</file>
+        <file>tiles/VERTICAL.png</file>
+    </qresource>
+</RCC>
