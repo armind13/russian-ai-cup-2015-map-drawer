@@ -44,6 +44,7 @@ protected:
 private:
     Ui::MainWindow *ui;
     QList<QList<TileType> > tiles;
+    QList<QPointF> coordinates;
     QImage image_VERTICAL;
     QImage image_HORIZONTAL;
     QImage image_LEFT_TOP_CORNER;
@@ -59,7 +60,8 @@ private:
     QList<QPair<int, int> > waypoints;
 
     void loadTiles();
-    void parseFile();
+    void parseMapFile();
+    void parseCoordinatesFile();
 };
 
 #endif // MAINWINDOW_H

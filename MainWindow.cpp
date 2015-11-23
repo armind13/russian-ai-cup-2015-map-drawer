@@ -13,7 +13,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     loadTiles();
-    parseFile();
+    parseMapFile();
+    parseCoordinatesFile();
 }
 
 MainWindow::~MainWindow()
@@ -28,6 +29,9 @@ void MainWindow::paintEvent(QPaintEvent*)
         return;
     }
     QPainter painter(this);
+    QPen pen(Qt::red, 2);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setPen(pen);
 
     for (int i = 0; i < tiles.count(); ++i)
     {
@@ -95,6 +99,11 @@ void MainWindow::paintEvent(QPaintEvent*)
 
         painter.drawText(rect, Qt::AlignCenter, QString::number(i));
     }
+
+    for (int i = 0; i < coordinates.count(); ++i)
+    {
+        painter.drawPoint(coordinates.at(i));
+    }
 }
 
 void MainWindow::loadTiles()
@@ -113,7 +122,7 @@ void MainWindow::loadTiles()
     image_EMPTY.load(":/TilesImages/tiles/EMPTY.png");
 }
 
-void MainWindow::parseFile()
+void MainWindow::parseMapFile()
 {
     QFile mapFile(PathToMap);
     bool parseTiles = true;
@@ -156,5 +165,32 @@ void MainWindow::parseFile()
             }
         }
         mapFile.close();
+    }
+}
+
+void MainWindow::parseCoordinatesFile()
+{
+    QFile coordinatesFile(PathToCoordinates);
+    if (coordinatesFile.open(QIODevice::ReadOnly))
+    {
+        QTextStream in(&coordinatesFile);
+        while ( ! in.atEnd())
+        {
+            QString line(in.readLine(50));
+            QStringList stringValues = line.split(" ");
+            if (stringValues.count() == 2)
+            {
+                QPair<double, double> pair;
+                bool xOk(false);
+                pair.first = stringValues.at(0).toDouble(&xOk);
+                bool yOk(false);
+                pair.second = stringValues.at(1).toDouble(&yOk);
+                if (xOk && yOk)
+                {
+                    QPointF point(pair.first / 10.0, pair.second / 10.0);
+                    coordinates.push_back(point);
+                }
+            }
+        }
     }
 }
