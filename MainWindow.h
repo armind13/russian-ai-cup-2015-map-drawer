@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QList>
 #include <QImage>
+#include <QPoint>
+#include <QString>
 
 enum TileType
 {
@@ -45,6 +47,7 @@ private:
     Ui::MainWindow *ui;
     QList<QList<TileType> > tiles;
     QList<QPointF> coordinates;
+    QList<QPair<QPoint, QString> > waypoints;
     QImage image_VERTICAL;
     QImage image_HORIZONTAL;
     QImage image_LEFT_TOP_CORNER;
@@ -56,8 +59,7 @@ private:
     QImage image_TOP_HEADED_T;
     QImage image_BOTTOM_HEADED_T;
     QImage image_CROSSROADS;
-    QImage image_EMPTY;
-    QList<QPair<int, int> > waypoints;
+    QImage image_EMPTY;    
 
     void loadTiles();
     void parseMapFile();

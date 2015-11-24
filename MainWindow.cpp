@@ -94,10 +94,9 @@ void MainWindow::paintEvent(QPaintEvent*)
     painter.setBrush(Qt::black);
     for (int i = 0; i < waypoints.count(); ++i)
     {
-        QRect rect(QPoint(waypoints.at(i).first * TileSize, waypoints.at(i).second * TileSize),
+        QRect rect(QPoint(waypoints.at(i).first.x() * TileSize, waypoints.at(i).first.y() * TileSize),
                    QSize(TileSize, TileSize));
-
-        painter.drawText(rect, Qt::AlignCenter, QString::number(i));
+        painter.drawText(rect, Qt::AlignCenter, waypoints.at(i).second);
     }
 
     for (int i = 0; i < coordinates.count(); ++i)
@@ -129,6 +128,7 @@ void MainWindow::parseMapFile()
     if (mapFile.open(QIODevice::ReadOnly))
     {
         QTextStream in(&mapFile);
+        int numberOfTile = 0;
         while ( ! in.atEnd())
         {
             QString line(in.readLine(150));
@@ -153,15 +153,31 @@ void MainWindow::parseMapFile()
                 tiles.push_back(column);
             }
             else
-            {
+            {                
                 if (stringValues.count() != 2)
                 {
                     continue;
                 }
-                QPair<int, int> waypoint;
-                waypoint.first = stringValues.at(0).toInt();
-                waypoint.second = stringValues.at(1).toInt();
-                waypoints.push_back(waypoint);
+                QPoint point;
+                point.setX(stringValues.at(0).toInt());
+                point.setY(stringValues.at(1).toInt());
+                bool found(false);
+                for (int j = 0; j < waypoints.count(); ++j)
+                {
+                    if (waypoints.at(j).first == point)
+                    {
+                        QString newValue = waypoints.at(j).second + "_" + QString::number(numberOfTile);
+                        waypoints.removeAt(j);
+                        waypoints.push_back(qMakePair<QPoint, QString>(point, newValue));
+                        found = true;
+                        break;
+                    }
+                }
+                if ( ! found)
+                {
+                    waypoints.push_back(qMakePair<QPoint, QString>(point, QString::number(numberOfTile)));
+                }
+                ++numberOfTile;
             }
         }
         mapFile.close();
