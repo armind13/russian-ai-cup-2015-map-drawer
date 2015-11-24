@@ -99,8 +99,13 @@ void MainWindow::paintEvent(QPaintEvent*)
         painter.drawText(rect, Qt::AlignCenter, waypoints.at(i).second);
     }
 
-    for (int i = 0; i < coordinates.count(); ++i)
+    const auto CoordinatesCount = coordinates.count();
+    auto colorIteration = 200.0 / CoordinatesCount;
+    for (int i = 0; i < CoordinatesCount; ++i)
     {
+        auto currentDiffColor = static_cast<int>(ceil(i*colorIteration));
+        pen.setColor(QColor(255, currentDiffColor, currentDiffColor, 200));
+        painter.setPen(pen);
         painter.drawPoint(coordinates.at(i));
     }
 }
