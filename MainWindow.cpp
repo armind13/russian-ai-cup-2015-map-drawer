@@ -4,6 +4,7 @@
 #include <QTextStream>
 #include <QPainter>
 #include <QRect>
+#include <QPixmap>
 
 #include "Constants.h"
 
@@ -28,7 +29,13 @@ void MainWindow::paintEvent(QPaintEvent*)
     {
         return;
     }
-    QPainter painter(this);
+    int size(tiles.count());
+    if (size < tiles.at(0).count())
+    {
+        size = tiles.at(0).count();
+    }
+    QPixmap pixmap(size * TileSize, size * TileSize);
+    QPainter painter(&pixmap);
     QPen pen(Qt::red, 2);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(pen);
@@ -81,11 +88,6 @@ void MainWindow::paintEvent(QPaintEvent*)
         }
     }
 
-    int size = tiles.count();
-    if (size < tiles.at(0).count())
-    {
-        size = tiles.at(0).count();
-    }
     int lenghtOfWindow = size * TileSize;
     QPoint leftTop = geometry().topLeft();
     setGeometry(QRect(leftTop, QSize(lenghtOfWindow, lenghtOfWindow)));
@@ -108,6 +110,11 @@ void MainWindow::paintEvent(QPaintEvent*)
         painter.setPen(pen);
         painter.drawPoint(coordinates.at(i));
     }
+    QPainter drawToForm(this);
+    drawToForm.drawPixmap(0, 0, size * TileSize, size * TileSize, pixmap);
+    QFile file("map.png");
+    file.open(QIODevice::WriteOnly);
+    pixmap.save(&file, "PNG");
 }
 
 void MainWindow::loadTiles()
